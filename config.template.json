@@ -13,10 +13,10 @@
   "DELTA_TIME_FORECAST": 3,
   "DELTA_FUEL": 3000,
 
-  "COURSES_FILE": "/home/jovyan/work/",
-  "DEPTH_DATA": "/home/jovyan/work/depth_data_region1.nc",
-  "WEATHER_DATA": "/home/jovyan/work/weather_data_region1.nc",
-  "ROUTE_PATH": "/home/jovyan/work/",
+  "COURSES_FILE": "/home/jovyan/",
+  "DEPTH_DATA": "/home/jovyan/depth_data_region1.nc",
+  "WEATHER_DATA": "/home/jovyan/weather_data_region1.nc",
+  "ROUTE_PATH": "/home/jovyan/",
 
   "DATA_MODE": "from_file",
 
