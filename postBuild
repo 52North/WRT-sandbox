@@ -1,3 +1,2 @@
 #!/bin/bash
 git clone https://github.com/jonathanbauer03/WRT-for-sandbox.git
-SET WRT_FIGURE_PATH=/home/jovyan/Bilder-WRT
