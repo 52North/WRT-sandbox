@@ -1,1 +1,2 @@
 git+https://github.com/jonathanbauer03/WRT-for-sandbox.git
+python-dotenv
