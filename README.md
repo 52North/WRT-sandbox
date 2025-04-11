@@ -1,1 +1,1 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jonathanbauer03/WRT-sandbox.git/HEAD)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jonathanbauer03/WRT-sandbox.git/HEAD?urlpath=%2Fdoc%2Ftree%2Fexecute-WRT.ipynb)
