@@ -6,7 +6,7 @@ image_folder = "Images-WRT"
 target_width = 600  # Zielbreite in Pixeln
 
 # Optional: Nur bestimmte Bildtypen
-valid_extensions = ('.jpg')
+valid_extensions = ('.png')
 
 # Alle passenden Bilddateien holen
 image_files = [
