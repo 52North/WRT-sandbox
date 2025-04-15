@@ -30,7 +30,7 @@ for filename in image_files:
         resized_img = img.resize((target_width, new_height), Image.Resampling.LANCZOS)
 
         # Überschreiben, möglichst verlustarm speichern
-        if filename.lower().endswith(('.jpg', '.jpeg')):
+        if filename.lower().endswith(('.jpg')):
             resized_img.save(image_path, format='JPEG', quality=95, optimize=True)
         else:
             resized_img.save(image_path, optimize=True)
