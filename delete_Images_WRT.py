@@ -1,4 +1,5 @@
 import shutil
+import os
 
 folder_path = 'Images-WRT'
 
