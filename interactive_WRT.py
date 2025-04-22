@@ -36,6 +36,20 @@ button2= widgets.Button(description="new route")
 global route_displayed
 route_displayed = False
 
+# define output for geojson data
+info_output = widgets.Output()
+
+# function to display geojson data
+def handle_click(event, feature, **kwargs):
+    with info_output:
+        info_output.clear_output()
+        print("Information to this point:")
+        for key, value in feature["properties"].items():
+            if isinstance(value, dict) and "value" in value and "unit" in value:
+                print(f"{key}: {value['value']} {value['unit']}")
+            else:
+                print(f"{key}: {value}")
+
 # Function that deletes the last route and sets the map markers to their default position
 def on_button2_clicked(b):
     global route_displayed
@@ -63,11 +77,12 @@ def on_button1_clicked(b):
         with open('config.template.json', 'w') as file: 
             json.dump(data, file, indent=4)
         subprocess.run(["python", "delete_Images_WRT.py"])
-        subprocess.run(["python", "cli.py -f config.template.json"])
+        subprocess.run(["python", "cli.py", "-f", "config.template.json"])
         with open("min_time_route.json") as f:
             data = json.load(f)
         global geo_json
         geo_json = GeoJSON(data=data)
+        geo_json.on_click(handle_click)
         m.remove(marker1)
         m.remove(marker2)
         m.add(geo_json) 
@@ -80,4 +95,4 @@ button1.on_click(on_button1_clicked)
 button2.on_click(on_button2_clicked)
 ui= widgets.HBox([button1, button2])
 display(ui)
-m
+display(m)
