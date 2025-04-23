@@ -5,7 +5,7 @@ from PIL import Image
 from IPython.display import display, clear_output
 import ipywidgets as widgets
 
-if not os.listdir(Images-WRT):
+if not os.listdir("Images-WRT"):
     raise RuntimeError("Image folder empty")
 
 # Resize images

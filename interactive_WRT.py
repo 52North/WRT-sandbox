@@ -1,9 +1,11 @@
 import json
+import datetime
 import os
 import subprocess
 from ipyleaflet import Map, Marker, AwesomeIcon, GeoJSON
 import ipywidgets as widgets
 from ipywidgets import Button
+from IPython.display import display
 
 # Define the look of the map markers
 icon1 = AwesomeIcon(
@@ -90,9 +92,41 @@ def on_button1_clicked(b):
     else:
         print("Route already displayed")
 
+
+# Funktion zum Umrechnen eines Sliderwerts in eine Zeit
+def slider_value_to_time(value):
+    minutes = value * 15
+    return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+# Initialer Zeitwert
+initial_value = 0
+initial_time = slider_value_to_time(initial_value)
+
+# Slider-Widget mit leerer Beschreibung (diese wird dynamisch gesetzt)
+time_slider = widgets.IntSlider(
+    value=initial_value,
+    min=0,
+    max=95,
+    step=1,
+    description=f"Uhrzeit: {initial_time}",
+    continuous_update=True,
+    style={'description_width': 'initial'},
+    layout=widgets.Layout(width='500px')
+)
+
+# Callback zur Aktualisierung der Beschriftung
+def update_description(change):
+    new_time = slider_value_to_time(change['new'])
+    time_slider.description = f"Uhrzeit: {new_time}"
+
+# Verbindung Slider ↔ Callback
+time_slider.observe(update_description, names='value')
+
+
 # Add callbacks for the buttons and display them and he map 
 button1.on_click(on_button1_clicked)
 button2.on_click(on_button2_clicked)
 ui= widgets.HBox([button1, button2])
 display(ui)
-display(m)
+display(m, info_output)
+display(time_slider)
