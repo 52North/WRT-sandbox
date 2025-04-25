@@ -130,7 +130,7 @@ time_slider = widgets.IntSlider(
 def update_time_display(change):
     current_time = start_time + step * change['new']
     formatted_time = current_time.strftime("%Y-%m-%dT%H:%MZ")
-    time_display.value = f"Aktuelle Zeit: {formatted_time}"
+    time_display.value = f"Start time: {formatted_time}"
 
 # Initiales Label setzen
 update_time_display({'new': 0})
@@ -141,6 +141,6 @@ time_slider.observe(update_time_display, names='value')
 # Add callbacks for the buttons and display them and he map 
 button1.on_click(on_button1_clicked)
 button2.on_click(on_button2_clicked)
-ui= widgets.HBox([widgets.VBox([time_slider, time_display]), button1, button2])
+ui= widgets.HBox([widgets.VBox([time_slider, time_display]), widgets.VBox([button1, button2])])
 display(ui)
 display(m, info_output)
