@@ -84,8 +84,8 @@ def on_button1_clicked(b):
             data['DEPARTURE_TIME']=iso_time
         with open('config.template.json', 'w') as file: 
             json.dump(data, file, indent=4)
-        subprocess.run(["python", "delete_Images_WRT.py"])
-        subprocess.run(["python", "cli.py", "-f", "config.template.json"])
+        subprocess.Popen(["python", "delete_Images_WRT.py"])
+        subprocess.Popen(["python", "cli.py", "-f", "config.template.json"])
         with open("min_time_route.json") as f:
             data = json.load(f)
         geo_json = add_geojson_to_map(data, m)
