@@ -1,5 +1,5 @@
 import json
-import datetime
+from datetime import datetime, timedelta
 import os
 import subprocess
 from ipyleaflet import Map, Marker, AwesomeIcon, GeoJSON
@@ -38,6 +38,12 @@ button2= widgets.Button(description="new route")
 global route_displayed
 route_displayed = False
 
+global start_date 
+start_date = datetime(2025, 4, 1, 9, 0)
+global end_time
+end_time = datetime(2025, 4, 5, 6, 0)
+
+
 # define output for geojson data
 info_output = widgets.Output()
 
@@ -70,12 +76,17 @@ def on_button2_clicked(b):
 # starts the WRT and displays the calculated route
 def on_button1_clicked(b):
     global route_displayed
+    global start_date 
     if route_displayed==False :
         a,b=marker1.location
         c,d=marker2.location
+        slider_minutes = time_slider.value * 15
+        selected_time = start_date + timedelta(minutes=slider_minutes)
+        iso_time = selected_time.strftime("%Y-%m-%dT%H:%MZ")
         with open('config.template.json', 'r+') as f:
             data = json.load(f)
             data['DEFAULT_ROUTE'] = [a,b,c,d]
+            data['DEPARTURE_TIME']=iso_time
         with open('config.template.json', 'w') as file: 
             json.dump(data, file, indent=4)
         subprocess.run(["python", "delete_Images_WRT.py"])
@@ -93,40 +104,43 @@ def on_button1_clicked(b):
         print("Route already displayed")
 
 
-# Funktion zum Umrechnen eines Sliderwerts in eine Zeit
-def slider_value_to_time(value):
-    minutes = value * 15
-    return f"{minutes // 60:02d}:{minutes % 60:02d}"
+start_time = datetime(2025, 4, 1, 9, 0)
+end_time = datetime(2025, 4, 5, 6, 0)
 
-# Initialer Zeitwert
-initial_value = 0
-initial_time = slider_value_to_time(initial_value)
+# Anzahl der 15-Minuten-Schritte
+step = timedelta(minutes=15)
+total_steps = int((end_time - start_time) / step)
 
-# Slider-Widget mit leerer Beschreibung (diese wird dynamisch gesetzt)
+# Ausgabe-Widget
+time_display = widgets.Label()
+
+# Slider definieren
 time_slider = widgets.IntSlider(
-    value=initial_value,
+    value=0,
     min=0,
-    max=95,
+    max=total_steps,
     step=1,
-    description=f"Uhrzeit: {initial_time}",
+    description='',
     continuous_update=True,
-    style={'description_width': 'initial'},
-    layout=widgets.Layout(width='500px')
+    readout = False,
+    layout=widgets.Layout(width='600px')
 )
 
-# Callback zur Aktualisierung der Beschriftung
-def update_description(change):
-    new_time = slider_value_to_time(change['new'])
-    time_slider.description = f"Uhrzeit: {new_time}"
+# Callback zur Aktualisierung der Anzeige
+def update_time_display(change):
+    current_time = start_time + step * change['new']
+    formatted_time = current_time.strftime("%Y-%m-%dT%H:%MZ")
+    time_display.value = f"Aktuelle Zeit: {formatted_time}"
 
-# Verbindung Slider ↔ Callback
-time_slider.observe(update_description, names='value')
+# Initiales Label setzen
+update_time_display({'new': 0})
 
+# Observer registrieren
+time_slider.observe(update_time_display, names='value')
 
 # Add callbacks for the buttons and display them and he map 
 button1.on_click(on_button1_clicked)
 button2.on_click(on_button2_clicked)
-ui= widgets.HBox([button1, button2])
+ui= widgets.HBox([widgets.VBox([time_slider, time_display]), button1, button2])
 display(ui)
 display(m, info_output)
-display(time_slider)
