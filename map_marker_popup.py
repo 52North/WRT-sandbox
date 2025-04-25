@@ -9,9 +9,6 @@ from IPython.display import display
 info_output = widgets.Output()
 
 
-with open("min_time_route.json") as f:
-    data = json.load(f)
-
 # function to display geojson data
 def display_marker_popup(event, feature, map):
     props = feature['properties']

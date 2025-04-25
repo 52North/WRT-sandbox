@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timedelta
 import os
 import subprocess
-from ipyleaflet import Map, Marker, AwesomeIcon, GeoJSON
+from ipyleaflet import Map, Marker, AwesomeIcon, GeoJSON, Rectangle
 import ipywidgets as widgets
 from ipywidgets import Button
 from IPython.display import display
@@ -32,6 +32,15 @@ marker2 = Marker(location=([39.926688, 10.5]), draggable=True, icon=icon2)
 m.add(marker1)
 m.add(marker2)
 
+# Bounding box for weather data
+bounds = [(37.0, 1.0), ( 42.0, 15.0)]
+rect = Rectangle(
+    bounds=bounds,
+    color="green",
+    fill_color="green",
+    fill_opacity=0.2
+)  
+m.add(rect)
 # Define Buttons to start the routing and to set a new route
 button1= widgets.Button(description="start routing")
 button2= widgets.Button(description="new route")
@@ -87,8 +96,8 @@ def on_button1_clicked(b):
         subprocess.run(["python", "delete_Images_WRT.py"])
         subprocess.run(["python", "cli.py", "-f", "config.template.json"])
         with open("min_time_route.json") as f:
-            data = json.load(f)
-        geo_json = add_geojson_to_map(data, m)
+            geodata = json.load(f)
+        geo_json = add_geojson_to_map(geodata, m)
         m.remove(marker1)
         m.remove(marker2) 
         route_displayed=True 
