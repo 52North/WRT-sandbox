@@ -6,6 +6,8 @@ from ipyleaflet import Map, Marker, AwesomeIcon, GeoJSON
 import ipywidgets as widgets
 from ipywidgets import Button
 from IPython.display import display
+from map_marker_popup import add_geojson_to_map
+
 
 # Define the look of the map markers
 icon1 = AwesomeIcon(
@@ -38,6 +40,8 @@ button2= widgets.Button(description="new route")
 global route_displayed
 route_displayed = False
 
+global geo_json
+geo_json = None
 global start_date 
 start_date = datetime(2025, 4, 1, 9, 0)
 global end_time
@@ -47,20 +51,10 @@ end_time = datetime(2025, 4, 5, 6, 0)
 # define output for geojson data
 info_output = widgets.Output()
 
-# function to display geojson data
-def handle_click(event, feature, **kwargs):
-    with info_output:
-        info_output.clear_output()
-        print("Information to this point:")
-        for key, value in feature["properties"].items():
-            if isinstance(value, dict) and "value" in value and "unit" in value:
-                print(f"{key}: {value['value']} {value['unit']}")
-            else:
-                print(f"{key}: {value}")
-
 # Function that deletes the last route and sets the map markers to their default position
 def on_button2_clicked(b):
     global route_displayed
+    global geo_json
     if route_displayed==True:
         marker1.location=(39.926688, 5)
         marker2.location=(39.926688, 10.5)
@@ -76,7 +70,8 @@ def on_button2_clicked(b):
 # starts the WRT and displays the calculated route
 def on_button1_clicked(b):
     global route_displayed
-    global start_date 
+    global start_date
+    global geo_json 
     if route_displayed==False :
         a,b=marker1.location
         c,d=marker2.location
@@ -93,12 +88,9 @@ def on_button1_clicked(b):
         subprocess.run(["python", "cli.py", "-f", "config.template.json"])
         with open("min_time_route.json") as f:
             data = json.load(f)
-        global geo_json
-        geo_json = GeoJSON(data=data)
-        geo_json.on_click(handle_click)
+        geo_json = add_geojson_to_map(data, m)
         m.remove(marker1)
-        m.remove(marker2)
-        m.add(geo_json) 
+        m.remove(marker2) 
         route_displayed=True 
     else:
         print("Route already displayed")

@@ -58,3 +58,4 @@ def add_geojson_to_map(geojson_data, map):
     
     # GeoJSON-Layer zur Karte hinzufügen
     map.add(geo_json)
+    return geo_json
