@@ -118,10 +118,6 @@ def on_button1_clicked(b):
     else:
         print("Route already displayed")
 
-    # Starte den Routingprozess in einem eigenen Thread
-    threading.Thread(target=task).start()
-
-
 # Anzahl der 15-Minuten-Schritte
 step = timedelta(minutes=15)
 total_steps = int((end_time - start_time) / step)
