@@ -52,8 +52,8 @@ route_displayed = False
 
 global geo_json
 geo_json = None
-global start_date 
-start_date = datetime(2025, 4, 1, 9, 0)
+global start_time 
+start_time = datetime(2025, 4, 1, 9, 0)
 global end_time
 end_time = datetime(2025, 4, 5, 6, 0)
 
@@ -79,56 +79,48 @@ def on_button2_clicked(b):
 # Function thet rewrites the config file so the WRT calculates the route between the given map markers,
 # starts the WRT and displays the calculated route
 def on_button1_clicked(b):
-    def task():
-        global route_displayed
-        global start_date
-        global geo_json 
+    global route_displayed
+    global start_date
+    global geo_json 
 
-        if route_displayed == False:
-            try:
-                a, b = marker1.location
-                c, d = marker2.location
-                slider_minutes = time_slider.value * 15
-                selected_time = start_date + timedelta(minutes=slider_minutes)
-                iso_time = selected_time.strftime("%Y-%m-%dT%H:%MZ")
+    if route_displayed == False:
+        a, b = marker1.location
+        c, d = marker2.location
+        slider_minutes = time_slider.value * 15
+        selected_time = start_time + timedelta(minutes=slider_minutes)
+        iso_time = selected_time.strftime("%Y-%m-%dT%H:%MZ")
 
-                # Update config
-                with open('config.template.json', 'r+') as f:
-                    data = json.load(f)
-                    data['DEFAULT_ROUTE'] = [a, b, c, d]
-                    data['DEPARTURE_TIME'] = iso_time
+        # Update config
+        with open('config.template.json', 'r+') as f:
+            data = json.load(f)
+            data['DEFAULT_ROUTE'] = [a, b, c, d]
+            data['DEPARTURE_TIME'] = iso_time
 
-                with open('config.template.json', 'w') as file:
-                    json.dump(data, file, indent=4)
+        with open('config.template.json', 'w') as file:
+            json.dump(data, file, indent=4)
 
-                # Run subprocesses
-                subprocess.run(["python", "delete_Images_WRT.py"])
-                subprocess.run(["python", "cli.py", "-f", "config.template.json"])
+        # Run subprocesses
+        subprocess.run(["python", "delete_Images_WRT.py"])
+        subprocess.run(["python", "cli.py", "-f", "config.template.json"])
 
-                # Read and display route
-                with open("min_time_route.json") as f:
-                    geodata = json.load(f)
+        # Read and display route
+        with open("min_time_route.json") as f:
+            geodata = json.load(f)
 
-                geo_layer = add_geojson_to_map(geodata, m)
-                m.remove(marker1)
-                m.remove(marker2)
+        geo_layer = add_geojson_to_map(geodata, m)
+        m.remove(marker1)
+        m.remove(marker2)
 
-                # Set global state
-                route_displayed = True
-                global geo_json
-                geo_json = geo_layer
-
-            except Exception as e:
-                print(f"Error during routing: {e}")
-        else:
-            print("Route already displayed")
+        # Set global state
+        route_displayed = True
+        global geo_json
+        geo_json = geo_layer
+    else:
+        print("Route already displayed")
 
     # Starte den Routingprozess in einem eigenen Thread
     threading.Thread(target=task).start()
 
-
-start_time = datetime(2025, 4, 1, 9, 0)
-end_time = datetime(2025, 4, 5, 6, 0)
 
 # Anzahl der 15-Minuten-Schritte
 step = timedelta(minutes=15)
