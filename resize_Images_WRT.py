@@ -2,7 +2,7 @@ import os
 from PIL import Image
 
 # Ordner mit Originalbildern
-image_folder = "Images-WRT"
+image_folder = "Graphics-WRT"
 target_width = 600  # Zielbreite in Pixeln
 
 # Optional: Nur bestimmte Bildtypen

@@ -5,7 +5,7 @@ from PIL import Image
 from IPython.display import display, clear_output
 import ipywidgets as widgets
 
-if not os.listdir("Images-WRT"):
+if not os.listdir("Graphics-WRT"):
     raise RuntimeError("Image folder empty")
 
 # Resize images
@@ -17,7 +17,7 @@ def natural_key(s):
 
 
 # Set path to Images folder
-image_folder = "Images-WRT"
+image_folder = "Graphics-WRT"
 image_files = sorted([
     f for f in os.listdir(image_folder)
     if f.lower().startswith('fig') and f.lower().endswith('.png')

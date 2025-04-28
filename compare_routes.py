@@ -23,7 +23,7 @@ def plot_power_vs_dist(rp_list, rp_str_list, scenario_str, power_type='fuel'):
     ax.tick_params(labelleft=False, left=False, top=True)   # hide y labels
     ax.text(0.95, 0.96, scenario_str, verticalalignment='top', horizontalalignment='right',
             transform=ax.transAxes)
-    plt.savefig('/home/jovyan/Images-WRT' + '/' + power_type + '_vs_dist.png')
+    plt.savefig('/home/jovyan/Graphics-WRT' + '/' + power_type + '_vs_dist.png')
 
 
 def plot_acc_power_vs_dist(rp_list, rp_str_list, power_type='fuel'):
@@ -33,7 +33,7 @@ def plot_acc_power_vs_dist(rp_list, rp_str_list, power_type='fuel'):
 
     ax.legend(loc='upper center')
     # ax.set_ylim(0, 0.016)
-    plt.savefig('/home/jovyan/Images-WRT' + '/' + power_type + 'acc_vs_dist.png')
+    plt.savefig('/home/jovyan/Graphics-WRT' + '/' + power_type + 'acc_vs_dist.png')
 
 
 def plot_power_vs_coord(rp_list, rp_str_list, coordstring, power_type='fuel'):
@@ -42,7 +42,7 @@ def plot_power_vs_coord(rp_list, rp_str_list, coordstring, power_type='fuel'):
         rp_list[irp].plot_power_vs_coord(ax, graphics.get_colour(irp), rp_str_list[irp], coordstring, power_type)
     ax.legend(loc='lower left')
     # ax.set_ylim(0, 0.016)
-    plt.savefig('/home/jovyan/Images-WRT' + '/' + power_type + '_vs_' + coordstring + '.png')
+    plt.savefig('/home/jovyan/Graphics-WRT' + '/' + power_type + '_vs_' + coordstring + '.png')
 
 
 def plot_power_vs_dist_ratios(rp_list, rp_str_list, scenario_str, power_type='fuel'):
@@ -75,13 +75,13 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Weather Routing Tool')
     parser.add_argument('--base-dir', help="Base directory of route geojson files (absolute path)",
-                        required=True, type=str)
+                        required=False, type=str)
     parser.add_argument('--figure-dir', help="Figure directory (absolute path)",
-                        required=True, type=str)
+                        required=False, type=str)
 
     args = parser.parse_args()
 
-    figurefile = args.figure_dir
+    figurefile = '/home/jovyan/Graphics-WRT'
 
     filename1 = ("min_time_route.json")
     rp_read1 = RouteParams.from_file(filename1)
@@ -152,7 +152,7 @@ if __name__ == "__main__":
         for irp in range(0, len(rp_list)):
             ax = rp_list[irp].plot_route(ax, graphics.get_colour(irp), rp_str_list[irp])
         ax.legend()
-        plt.savefig('/home/jovyan/Images-WRT' + '/route_waterdepth.png')
+        plt.savefig('/home/jovyan/Graphics-WRT' + '/route_waterdepth.png')
 
     ##
     # plotting  vs. distance
