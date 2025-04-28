@@ -20,7 +20,7 @@ def natural_key(s):
 image_folder = "Images-WRT"
 image_files = sorted([
     f for f in os.listdir(image_folder)
-    if f.lower().endswith('.png')
+    if f.lower().startswith('fig') and f.lower().endswith('.png')
     ], key=natural_key)
 
 # Output-Widget for the image 

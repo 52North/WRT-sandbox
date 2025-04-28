@@ -104,8 +104,8 @@ if __name__ == "__main__":
 
     do_plot_power_vs_lon = True
     do_plot_fuel_vs_lon = False
-    do_plot_power_vs_lat = True
-    do_plot_fuel_vs_lat = False
+    do_plot_power_vs_lat = False
+    do_plot_fuel_vs_lat = True
 
     do_plot_power_vs_dist_showing_weather = False
     do_plot_power_vs_dist_ratios = False
