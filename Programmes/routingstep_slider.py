@@ -6,7 +6,7 @@ from IPython.display import display, clear_output
 import ipywidgets as widgets
 
 # Path to image folder
-image_folder = "Graphics-WRT"
+image_folder = "/home/jovyan/Graphics-WRT"
 
 # Resize images
 subprocess.run(["python", "resize_Images_WRT.py"])

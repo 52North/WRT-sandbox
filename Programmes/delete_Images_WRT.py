@@ -1,7 +1,7 @@
 import shutil
 import os
 
-folder_path = 'Graphics-WRT'
+folder_path = '/home/jovyan/Graphics-WRT'
 
 for filename in os.listdir(folder_path):
     file_path = os.path.join(folder_path, filename)

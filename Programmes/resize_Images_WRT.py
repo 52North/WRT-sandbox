@@ -2,7 +2,7 @@ import os
 from PIL import Image
 
 # Folder containing the original images
-image_folder = "Graphics-WRT"
+image_folder = "/home/jovyan/Graphics-WRT"
 target_width = 600  # Target width in pixels
 
 # Optionally: only process certain image types

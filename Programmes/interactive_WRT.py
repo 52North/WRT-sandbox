@@ -91,20 +91,20 @@ def on_button1_clicked(b):
         iso_time = selected_time.strftime("%Y-%m-%dT%H:%MZ")
 
         # Update config
-        with open('config.template.json', 'r+') as f:
+        with open('/home/jovyan/Configuraton/config.template.json', 'r+') as f:
             data = json.load(f)
             data['DEFAULT_ROUTE'] = [a, b, c, d]
             data['DEPARTURE_TIME'] = iso_time
 
-        with open('config.template.json', 'w') as file:
+        with open('/home/jovyan/Configuraton/config.template.json', 'w') as file:
             json.dump(data, file, indent=4)
 
         # Run subprocesses
         subprocess.run(["python", "delete_Images_WRT.py"])
-        subprocess.run(["python", "cli.py", "-f", "config.template.json"])
+        subprocess.run(["python", "cli.py", "-f", "/home/jovyan/Configuraton/config.template.json"])
 
         # Read and display route
-        with open("min_time_route.json") as f:
+        with open("/home/jovyan/Data/min_time_route.json") as f:
             geodata = json.load(f)
 
         geo_layer = add_geojson_to_map(geodata, m)
