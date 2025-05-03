@@ -5,8 +5,8 @@ from PIL import Image
 from IPython.display import display, clear_output
 import ipywidgets as widgets
 
-if not os.listdir("Graphics-WRT"):
-    raise RuntimeError("Image folder empty")
+# Path to image folder
+image_folder = "Graphics-WRT"
 
 # Resize images
 subprocess.run(["python", "resize_Images_WRT.py"])
@@ -15,13 +15,15 @@ subprocess.run(["python", "resize_Images_WRT.py"])
 def natural_key(s):
     return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
 
-
-# Set path to Images folder
-image_folder = "Graphics-WRT"
+# Get and sort valid image files
 image_files = sorted([
     f for f in os.listdir(image_folder)
     if f.lower().startswith('fig') and f.lower().endswith('.png')
-    ], key=natural_key)
+], key=natural_key)
+
+# Raise an error if no matching images were found
+if not image_files:
+    raise RuntimeError(f"No images starting with 'fig' and ending with '.png' found in '{image_folder}'.")
 
 # Output-Widget for the image 
 image_output = widgets.Output()
@@ -50,10 +52,10 @@ slider = widgets.IntSlider(
 slider.observe(lambda change: show_image(change['new']), names='value')
 
 # Layout
-ui = widgets.HBox([slider,image_output], layout=widgets.Layout(align_items='center'))
+ui = widgets.HBox([slider, image_output], layout=widgets.Layout(align_items='center'))
 
 # Show first image
 show_image(0)
 
-# Show ui
+# Show UI
 display(ui)

@@ -7,8 +7,8 @@ import ipywidgets as widgets
 from ipywidgets import Button
 from IPython.display import display
 from map_marker_popup import add_geojson_to_map
-import threading
 
+subprocess.run(["python", "load_env.py"])
 
 # Define the look of the map markers
 icon1 = AwesomeIcon(

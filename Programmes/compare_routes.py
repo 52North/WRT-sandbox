@@ -100,7 +100,7 @@ if __name__ == "__main__":
     do_plot_route = False
     do_plot_power_vs_dist = True
     do_plot_fuel_vs_dist = False
-    do_plot_acc_fuel_vs_dist = False
+    do_plot_acc_fuel_vs_dist = True
 
     do_plot_power_vs_lon = True
     do_plot_fuel_vs_lon = False
