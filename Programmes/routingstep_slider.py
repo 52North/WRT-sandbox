@@ -9,7 +9,7 @@ import ipywidgets as widgets
 image_folder = "/home/jovyan/Data/Graphics-WRT"
 
 # Resize images
-subprocess.run(["python", "resize_Images_WRT.py"])
+subprocess.run(["python", "/home/jovyan/Programmes/resize_Images_WRT.py"])
 
 # Define key for sorted function
 def natural_key(s):

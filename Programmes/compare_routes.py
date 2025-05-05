@@ -81,9 +81,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    figurefile = '/home/jovyan/Graphics-WRT'
+    figurefile = '/home/jovyan/Data/Graphics-WRT'
 
-    filename1 = ("min_time_route.json")
+    filename1 = ("/home/jovyan/Data/min_time_route.json")
     rp_read1 = RouteParams.from_file(filename1)
     rp_1_str = 'speedy isobased routing'
 
