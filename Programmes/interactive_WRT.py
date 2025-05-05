@@ -8,7 +8,6 @@ from ipywidgets import Button
 from IPython.display import display
 from map_marker_popup import add_geojson_to_map
 
-subprocess.run(["python", "/home/jovyan/Programmes/load_env.py"])
 
 # Define the look of the map markers
 icon1 = AwesomeIcon(
@@ -100,9 +99,7 @@ def on_button1_clicked(b):
             json.dump(data, file, indent=4)
 
         # Run subprocesses
-        subprocess.run(["python", "/home/jovyan/Programmes/delete_Images_WRT.py"])
-        subprocess.run(["python", "/home/jovyan/Programmes/cli.py", "-f", "/home/jovyan/Configuration/config.template.json"])
-
+        subprocess.run(["python", "/home/jovyan/Programmes/run_WRT.py"])
         # Read and display route
         with open("/home/jovyan/Data/min_time_route.json") as f:
             geodata = json.load(f)
