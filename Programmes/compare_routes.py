@@ -23,7 +23,7 @@ def plot_power_vs_dist(rp_list, rp_str_list, scenario_str, power_type='fuel'):
     ax.tick_params(labelleft=False, left=False, top=True)   # hide y labels
     ax.text(0.95, 0.96, scenario_str, verticalalignment='top', horizontalalignment='right',
             transform=ax.transAxes)
-    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + power_type + '_vs_dist.png')
+    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_' + power_type + '_vs_dist.png')
 
 
 def plot_acc_power_vs_dist(rp_list, rp_str_list, power_type='fuel'):
@@ -33,7 +33,7 @@ def plot_acc_power_vs_dist(rp_list, rp_str_list, power_type='fuel'):
 
     ax.legend(loc='upper center')
     # ax.set_ylim(0, 0.016)
-    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + power_type + 'acc_vs_dist.png')
+    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_' + power_type + 'acc_vs_dist.png')
 
 
 def plot_power_vs_coord(rp_list, rp_str_list, coordstring, power_type='fuel'):
@@ -42,7 +42,7 @@ def plot_power_vs_coord(rp_list, rp_str_list, coordstring, power_type='fuel'):
         rp_list[irp].plot_power_vs_coord(ax, graphics.get_colour(irp), rp_str_list[irp], coordstring, power_type)
     ax.legend(loc='lower left')
     # ax.set_ylim(0, 0.016)
-    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + power_type + '_vs_' + coordstring + '.png')
+    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_' + power_type + '_vs_' + coordstring + '.png')
 
 
 def plot_power_vs_dist_ratios(rp_list, rp_str_list, scenario_str, power_type='fuel'):
@@ -67,7 +67,7 @@ def plot_power_vs_dist_ratios(rp_list, rp_str_list, scenario_str, power_type='fu
     ax.text(0.11, 0.76, 'dashed lines: averages', verticalalignment='top', horizontalalignment='left',
             transform=ax.transAxes)
     # plt.axhline(y=1, color='gainsboro', linestyle='-')
-    plt.savefig(figurefile + '/' + power_type + '_vs_dist_ratios' + '.png')
+    plt.savefig(figurefile + '/'+ 'graph_' + power_type + '_vs_dist_ratios' + '.png')
 
 
 if __name__ == "__main__":
