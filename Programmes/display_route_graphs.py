@@ -1,2 +1,2 @@
 from slider import slider
-slider("graph")
+slider("graph", "graph nr.")

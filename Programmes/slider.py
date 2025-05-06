@@ -5,7 +5,7 @@ from PIL import Image
 from IPython.display import display, clear_output
 import ipywidgets as widgets
 
-def slider(prefix):
+def slider(prefix, scalestr):
     # Path to image folder
     image_folder = "/home/jovyan/Data/Graphics-WRT"
 
@@ -44,7 +44,7 @@ def slider(prefix):
         max=len(image_files) - 1,
         step=1,
         orientation='vertical',
-        description='routing-step',
+        description=scalestr,
         continuous_update=True,
         layout=widgets.Layout(height='300px')
     )

@@ -1,2 +1,2 @@
 from slider import slider
-slider("fig")
+slider("fig", "routing-step")
