@@ -30,10 +30,12 @@ def display_marker_popup(event, feature, map):
     # HTML für das Popup
     popup_content = HTML()
     popup_content.value = f"""
-        <b>Time:</b> {time_text}<br>
-        <b>Fuel consumption:</b> {fuel_text}<br>
-        <b>Speed:</b> {speed_text}<br>
-        <b>Engine power:</b> {power_text}
+        <div style="margin-top:-10px">
+            <b>Time:</b> {time_text}<br>
+            <b>Fuel consumption:</b> {fuel_text}<br>
+            <b>Speed:</b> {speed_text}<br>
+            <b>Engine power:</b> {power_text}
+        </div>
     """
     
     # Popup erstellen
