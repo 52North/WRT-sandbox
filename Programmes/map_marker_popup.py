@@ -2,80 +2,84 @@ from ipyleaflet import GeoJSON, Popup
 from ipywidgets import HTML
 from datetime import datetime
 
-# Hilfsfunktion zum Parsen von Zeitstempeln
-def parse_iso8601(s):
-    try:
-        return datetime.strptime(s, "%Y-%m-%dT%H:%MZ")
-    except:
-        return None
-
-# Verbrauch bis zu einem bestimmten Index berechnen
-def get_cumulative_fuel_used(geojson_data, to_index):
-    features = geojson_data.get("features", [])
-    if to_index <= 0 or to_index >= len(features):
-        return 0.0
-
-    total_fuel = 0.0
-    for i in range(1, to_index + 1):
-        f_prev = features[i - 1]
-        f_curr = features[i]
-
-        t0 = parse_iso8601(f_prev.get("properties", {}).get("time", ""))
-        t1 = parse_iso8601(f_curr.get("properties", {}).get("time", ""))
-        rate = f_prev.get("properties", {}).get("fuel_consumption", {}).get("value", None)
-
-        if t0 and t1 and isinstance(rate, (int, float)):
-            delta_h = (t1 - t0).total_seconds() / 3600.0
-            total_fuel += rate * delta_h
-
-    return round(total_fuel, 3)
-
-# Popup-Anzeige bei Marker-Klick
-def display_marker_popup(event, feature, map, geojson_data):
-    props = feature['properties']
-    coordinates = feature['geometry']['coordinates'][::-1]
-    coordinates[0] += 0.45  # vertikal verschieben
-
-    time_text = props.get("time", {})
-    fuel = props.get("fuel_consumption", {})
-    speed = props.get("speed", {})
-    power = props.get("engine_power", {})
-
-    index = props.get("_index", None)
-    if index is not None:
-        fuel_used = get_cumulative_fuel_used(geojson_data, index)
-        fuel_used_text = f"{fuel_used} t"
-    else:
-        fuel_used_text = "?"
-
-    popup_content = HTML()
-    popup_content.value = f"""
-        <b>Time:</b> {time_text}<br>
-        <b>Fuel consumption:</b> {fuel.get('value', '–')} {fuel.get('unit', '')}<br>
-        <b>Speed:</b> {speed.get('value', '–')} {speed.get('unit', '')}<br>
-        <b>Engine power:</b> {power.get('value', '–')} {power.get('unit', '')}<br>
-        <b>Cumulative fuel used:</b> {fuel_used_text}
+def add_cumulative_fuel_to_features(geojson_data):
     """
+    Fügt jedem Feature im GeoJSON den kumulierten Treibstoffverbrauch als Attribut hinzu.
+    """
+    features = geojson_data.get('features', [])
+    cumulative_fuel = 0.0
 
-    popup = Popup(
-        location=coordinates,
-        child=popup_content,
-        close_button=True,
-        auto_close=False,
-        close_on_escape_key=True
-    )
+    for i in range(len(features) - 1):  # letzten Punkt auslassen
+        curr = features[i]
+        next_f = features[i + 1]
+
+        try:
+            t1 = datetime.strptime(curr['properties']['time'], "%Y-%m-%d %H:%M:%S")
+            t2 = datetime.strptime(next_f['properties']['time'], "%Y-%m-%d %H:%M:%S")
+            dt_hours = (t2 - t1).total_seconds() / 3600.0
+
+            fuel_rate = curr['properties']['fuel_consumption']['value']
+            if fuel_rate >= 0:
+                fuel_used = fuel_rate * dt_hours
+            else:
+                fuel_used = 0.0  # negative Werte ignorieren
+
+            cumulative_fuel += fuel_used
+        except Exception as e:
+            cumulative_fuel += 0.0  # im Fehlerfall keine Änderung
+
+        curr['properties']['cumulative_fuel_used'] = cumulative_fuel
+
+    # Zielpunkt bekommt kein validen Wert
+    if features:
+        features[-1]['properties']['cumulative_fuel_used'] = None
+
+    return geojson_data
+
+
+def display_marker_popup(event, feature, map):
+    """
+    Zeigt ein Popup mit Informationen zum angeklickten Punkt.
+    """
+    properties = feature.get('properties', {})
+    coords = feature.get('geometry', {}).get('coordinates', [None, None])
+    lat, lon = coords[1], coords[0]
+
+    lines = []
+
+    time = properties.get("time", "N/A")
+    speed = properties.get("speed", {}).get("value", "N/A")
+    fuel = properties.get("fuel_consumption", {}).get("value", "N/A")
+    fuel_type = properties.get("fuel_type", "N/A")
+    cumulative = properties.get("cumulative_fuel_used")
+
+    lines.append(f"<b>Time:</b> {time}")
+    lines.append(f"<b>Speed:</b> {speed} m/s")
+    lines.append(f"<b>Fuel consumption:</b> {fuel} t/h")
+    lines.append(f"<b>Fuel type:</b> {fuel_type}")
+
+    if cumulative is not None:
+        lines.append(f"<b>Cumulative fuel used:</b> {cumulative:.2f} t")
+    else:
+        lines.append(f"<b>Cumulative fuel used:</b> N/A")
+
+    html = HTML("<br>".join(lines))
+    popup = Popup(location=(lat, lon), child=html, close_button=True, auto_close=False)
     map.add(popup)
 
-# GeoJSON zur Karte hinzufügen und Klick-Events registrieren
+
 def add_geojson_to_map(geojson_data, map):
-    features = geojson_data.get("features", [])
-    for i, f in enumerate(features):
-        f.setdefault("properties", {})["_index"] = i
+    """
+    Fügt GeoJSON-Daten zur Karte hinzu, berechnet den kumulierten Treibstoffverbrauch,
+    und registriert einen Klick-Handler für Popups.
+    """
+    # Kumulierten Treibstoff berechnen
+    geojson_data = add_cumulative_fuel_to_features(geojson_data)
 
+    # Layer erstellen
     geo_json = GeoJSON(data=geojson_data, name='Route')
+    geo_json.on_click(lambda event, feature, **kwargs: display_marker_popup(event, feature, map))
 
-    # Event mit Übergabe von geojson_data
-    geo_json.on_click(lambda event, feature, **kwargs: display_marker_popup(event, feature, map, geojson_data))
-
+    # Zur Karte hinzufügen
     map.add(geo_json)
     return geo_json
