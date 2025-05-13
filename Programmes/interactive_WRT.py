@@ -32,6 +32,9 @@ marker2 = Marker(location=([39.926688, 10.5]), draggable=True, icon=icon2)
 m.add(marker1)
 m.add(marker2)
 
+# define output for geojson data
+info_output = widgets.Output()
+
 # Bounding box for weather data
 bounds = [(37.0, 1.0), ( 42.0, 15.0)]
 rect = Rectangle(
@@ -51,14 +54,22 @@ route_displayed = False
 
 global geo_json
 geo_json = None
+
 global start_time 
 start_time = datetime(2025, 4, 1, 9, 0)
+
 global end_time
 end_time = datetime(2025, 4, 5, 6, 0)
 
+global active_popups
+active_popups = []
 
-# define output for geojson data
-info_output = widgets.Output()
+# Funktion zum Entfernen aller offenen Popups
+def clear_popups():
+    for popup in active_popups:
+        m.remove(popup)
+    active_popups.clear()
+
 
 # Function that deletes the last route and sets the map markers to their default position
 def on_button2_clicked(b):
@@ -68,6 +79,7 @@ def on_button2_clicked(b):
         marker1.location=(39.926688, 5)
         marker2.location=(39.926688, 10.5)
         m.remove(geo_json)
+        clear_popups()
         m.add(marker1)
         m.add(marker2)
         route_displayed=False

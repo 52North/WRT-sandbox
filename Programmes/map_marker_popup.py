@@ -11,6 +11,10 @@ info_output = widgets.Output()
 
 # function to display geojson data
 def display_marker_popup(event, feature, map):
+    from IPython import get_ipython
+    shell = get_ipython()
+    active_popups = shell.user_ns.get('active_popups', [])
+
     props = feature['properties']
     coordinates = feature['geometry']['coordinates'][::-1]
     coordinates[0] += 0.45
@@ -47,6 +51,10 @@ def display_marker_popup(event, feature, map):
         close_on_escape_key=True
     ) 
     map.add(popup)
+    active_popups.append(popup)
+
+    # Update the global list
+    shell.user_ns['active_popups'] = active_popups
 
 def add_geojson_to_map(geojson_data, map):
      # GeoJSON-Layer erstellen
