@@ -1,4 +1,4 @@
-from ipyleaflet import GeoJSON, Popup
+from ipyleaflet import Marker, GeoJSON, Popup
 from ipywidgets import HTML
 from datetime import datetime
 
@@ -65,7 +65,11 @@ def display_marker_popup(event, feature, map):
 
     html = HTML("<br>".join(lines))
     popup = Popup(location=(lat, lon), child=html, close_button=True, auto_close=False)
-    map.add(popup)
+    
+    marker = Marker(location=(lat + 0.02, lon), opacity=0)
+    marker.popup = popup
+
+    map.add(marker)
 
 
 def add_geojson_to_map(geojson_data, map):
