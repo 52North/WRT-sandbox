@@ -13,6 +13,7 @@ def calculate_cumulative_fuel(geojson_data):
     features = geojson_data.get('features', [])
     cumulative_fuel = 0.0
     cumulative_fuel_list=[]
+    cumulative_fuel_list.append(cumulative_fuel)
     for i in range(len(features) - 1):  # letzten Punkt auslassen
         curr = features[i]
         next_f = features[i + 1]
@@ -27,8 +28,8 @@ def calculate_cumulative_fuel(geojson_data):
                 fuel_used = fuel_rate * dt_hours
             else:
                 fuel_used = 0.0  # negative Werte ignorieren
-            cumulative_fuel_list[i]=cumulative_fuel
             cumulative_fuel += fuel_used
+            cumulative_fuel_list.append(cumulative_fuel)
         except Exception as e:
             cumulative_fuel += 0.0  # im Fehlerfall keine Änderung
     return cumulative_fuel_list
@@ -54,7 +55,7 @@ def display_marker_popup(event, feature, map, fuel_list):
     power = props.get("engine_power", {})
     power_text = f"{power.get('value', '–')} {power.get('unit', '')}"
 
-    acc_fuel_text=f"{fuel_list[feature.get("id")] + "t"}"
+    acc_fuel_text = f"{fuel_list[feature.get('id')]} t"
    
     # HTML für das Popup
     popup_content = HTML()
@@ -63,8 +64,8 @@ def display_marker_popup(event, feature, map, fuel_list):
             <b>Time:</b> {time_text}<br>
             <b>Fuel consumption:</b> {fuel_text}<br>
             <b>Speed:</b> {speed_text}<br>
-            <b>Engine power:</b> {power_text}
-            <b>Cumulative fuel: </b> {acc_fuel_text}<br>
+            <b>Engine power:</b> {power_text}<br>
+            <b>Cumulative fuel: </b> {acc_fuel_text}
         </div>
     """
     
@@ -85,7 +86,7 @@ def display_marker_popup(event, feature, map, fuel_list):
 def add_geojson_to_map(geojson_data, map):
      # GeoJSON-Layer erstellen
     geo_json = GeoJSON(data=geojson_data, name='Route')
-    fuel_list=calculate_cumulative_fuel(geo_json)
+    fuel_list=calculate_cumulative_fuel(geojson_data)
     # Klick-Event-Handler setzen
     geo_json.on_click(lambda event, feature, **kwargs: display_marker_popup(event, feature, map, fuel_list))
     
