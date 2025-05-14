@@ -33,6 +33,7 @@ def calculate_cumulative_fuel(geojson_data):
         except Exception as e:
             cumulative_fuel += 0.0  # im Fehlerfall keine Änderung
     return cumulative_fuel_list
+
 # function to display geojson data
 def display_marker_popup(event, feature, map, fuel_list):
     from IPython import get_ipython
@@ -41,13 +42,10 @@ def display_marker_popup(event, feature, map, fuel_list):
 
     props = feature['properties']
     coordinates = feature['geometry']['coordinates'][::-1]
-    #coordinates[0] += 0.45
+    coordinates[0] += 0.45
     # Nur bestimmte Infos anzeigen
     time = props.get("time", {})
     time_text = time
-
-    fuel = props.get("fuel_consumption", {})
-    fuel_text = f"{fuel.get('value', '–')} {fuel.get('unit', '')}"
 
     speed = props.get("speed", {})
     speed_text = f"{speed.get('value', '–')} {speed.get('unit', '')}"
@@ -60,13 +58,10 @@ def display_marker_popup(event, feature, map, fuel_list):
     # HTML für das Popup
     popup_content = HTML()
     popup_content.value = f"""
-        <div style="margin-top:-10px">
-            <b>Time:</b> {time_text}<br>
-            <b>Fuel consumption:</b> {fuel_text}<br>
-            <b>Speed:</b> {speed_text}<br>
-            <b>Engine power:</b> {power_text}<br>
-            <b>Cumulative fuel: </b> {acc_fuel_text}
-        </div>
+        <b>Time:</b> {time_text}<br>
+        <b>Speed:</b> {speed_text}<br>
+        <b>Engine power:</b> {power_text}<br>
+        <b>Cumulative fuel: </b> {acc_fuel_text}
     """
     
     # Popup erstellen
