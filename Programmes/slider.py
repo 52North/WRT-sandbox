@@ -24,7 +24,7 @@ def slider(prefix, scalestr):
 
     # Raise an error if no matching images were found
     if not image_files:
-        raise RuntimeError(f"No images starting with '{prefix}' and ending with '.png' found in '{image_folder}'.")
+        raise RuntimeError(f"No images starting with '{prefix}' and ending with '.png' found in '{image_folder}'. Calculate a route first.")
 
     # Output-Widget for the image 
     image_output = widgets.Output()
