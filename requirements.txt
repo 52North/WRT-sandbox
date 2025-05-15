@@ -1,4 +1,4 @@
-git+https://github.com/jonathanbauer03/WRT-for-sandbox.git@f840645
+git+https://github.com/jonathanbauer03/WRT-for-sandbox.git@dcfdf6e
 python-dotenv
 ipyleaflet
 ipyopenlayers
