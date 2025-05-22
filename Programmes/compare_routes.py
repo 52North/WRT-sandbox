@@ -23,7 +23,7 @@ def plot_power_vs_dist(rp_list, rp_str_list, scenario_str, power_type='fuel'):
     ax.tick_params(labelleft=False, left=False, top=True)   # hide y labels
     ax.text(0.95, 0.96, scenario_str, verticalalignment='top', horizontalalignment='right',
             transform=ax.transAxes)
-    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_' + power_type + '_vs_dist.png')
+    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_'  + power_type + '_vs_dist.png')
 
 
 def plot_acc_power_vs_dist(rp_list, rp_str_list, power_type='fuel'):
@@ -33,7 +33,7 @@ def plot_acc_power_vs_dist(rp_list, rp_str_list, power_type='fuel'):
 
     ax.legend(loc='upper center')
     # ax.set_ylim(0, 0.016)
-    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_' + power_type + 'acc_vs_dist.png')
+    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_'  + power_type + 'acc_vs_dist.png')
 
 
 def plot_power_vs_coord(rp_list, rp_str_list, coordstring, power_type='fuel'):
@@ -42,7 +42,7 @@ def plot_power_vs_coord(rp_list, rp_str_list, coordstring, power_type='fuel'):
         rp_list[irp].plot_power_vs_coord(ax, graphics.get_colour(irp), rp_str_list[irp], coordstring, power_type)
     ax.legend(loc='lower left')
     # ax.set_ylim(0, 0.016)
-    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_' + power_type + '_vs_' + coordstring + '.png')
+    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/' + 'graph_'  + power_type + '_vs_' + coordstring + '.png')
 
 
 def plot_power_vs_dist_ratios(rp_list, rp_str_list, scenario_str, power_type='fuel'):
@@ -67,7 +67,20 @@ def plot_power_vs_dist_ratios(rp_list, rp_str_list, scenario_str, power_type='fu
     ax.text(0.11, 0.76, 'dashed lines: averages', verticalalignment='top', horizontalalignment='left',
             transform=ax.transAxes)
     # plt.axhline(y=1, color='gainsboro', linestyle='-')
-    plt.savefig(figurefile + '/'+ 'graph_' + power_type + '_vs_dist_ratios' + '.png')
+    plt.savefig(figurefile + '/' + 'graph_' + power_type + '_vs_dist_ratios' + '.png')
+
+
+def do_plot_route_function(rp_read, rp_read_list, rp_str_list, depthfile, show_Depth=True):
+    fig, ax = plt.subplots(figsize=graphics.get_standard('fig_size'))
+    ax.axis('off')
+    ax.xaxis.set_tick_params(labelsize='large')
+    fig, ax = graphics.generate_basemap(fig, depthfile, rp_read.start, rp_read.finish, '', show_Depth)
+
+    # ax = water_depth.plot_route_in_constraint(rp_read1, 0, fig, ax)
+    for irp in range(0, len(rp_read_list)):
+        ax = rp_read_list[irp].plot_route(ax, 'orange', rp_str_list[irp])
+    ax.legend()
+    plt.savefig('/home/jovyan/Graphics-WRT' + '/fig_final_route.png')
 
 
 if __name__ == "__main__":
@@ -75,15 +88,15 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Weather Routing Tool')
     parser.add_argument('--base-dir', help="Base directory of route geojson files (absolute path)",
-                        required=False, type=str)
+                        required=True, type=str)
     parser.add_argument('--figure-dir', help="Figure directory (absolute path)",
-                        required=False, type=str)
+                        required=True, type=str)
 
     args = parser.parse_args()
 
-    figurefile = '/home/jovyan/Data/Graphics-WRT'
+    figurefile = args.figure_dir
 
-    filename1 = ("/home/jovyan/Data/min_time_route.json")
+    filename1 = ("min_time_route.json")
     rp_read1 = RouteParams.from_file(filename1)
     rp_1_str = 'speedy isobased routing'
 
@@ -100,12 +113,12 @@ if __name__ == "__main__":
     do_plot_route = False
     do_plot_power_vs_dist = True
     do_plot_fuel_vs_dist = False
-    do_plot_acc_fuel_vs_dist = True
+    do_plot_acc_fuel_vs_dist = False
 
     do_plot_power_vs_lon = True
     do_plot_fuel_vs_lon = False
-    do_plot_power_vs_lat = False
-    do_plot_fuel_vs_lat = True
+    do_plot_power_vs_lat = True
+    do_plot_fuel_vs_lat = False
 
     do_plot_power_vs_dist_showing_weather = False
     do_plot_power_vs_dist_ratios = False
@@ -143,16 +156,7 @@ if __name__ == "__main__":
     ##
     # plotting routes in depth profile
     if do_plot_route:
-        fig, ax = plt.subplots(figsize=graphics.get_standard('fig_size'))
-        ax.axis('off')
-        ax.xaxis.set_tick_params(labelsize='large')
-        fig, ax = graphics.generate_basemap(fig, None, rp_read1.start, rp_read1.finish, '', False)
-
-        # ax = water_depth.plot_route_in_constraint(rp_read1, 0, fig, ax)
-        for irp in range(0, len(rp_list)):
-            ax = rp_list[irp].plot_route(ax, graphics.get_colour(irp), rp_str_list[irp])
-        ax.legend()
-        plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/route_waterdepth.png')
+        do_plot_route_function(rp_read1, rp_list, rp_str_list, None, False)
 
     ##
     # plotting  vs. distance
