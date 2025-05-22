@@ -80,7 +80,7 @@ def do_plot_route_function(rp_read, rp_read_list, rp_str_list, depthfile, show_D
     for irp in range(0, len(rp_read_list)):
         ax = rp_read_list[irp].plot_route(ax, 'orange', rp_str_list[irp])
     ax.legend()
-    plt.savefig('/home/jovyan/Graphics-WRT' + '/fig_final_route.png')
+    plt.savefig('/home/jovyan/Data/Graphics-WRT' + '/fig_final_route.png')
 
 
 if __name__ == "__main__":
