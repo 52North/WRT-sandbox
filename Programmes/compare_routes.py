@@ -88,15 +88,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Weather Routing Tool')
     parser.add_argument('--base-dir', help="Base directory of route geojson files (absolute path)",
-                        required=True, type=str)
+                        required=False, type=str)
     parser.add_argument('--figure-dir', help="Figure directory (absolute path)",
-                        required=True, type=str)
+                        required=False, type=str)
 
     args = parser.parse_args()
 
-    figurefile = args.figure_dir
-
-    filename1 = ("min_time_route.json")
+    figurefile = '/home/jovyan/Data/Graphics-WRT'
+    filename1 = ("/home/jovyan/Data/min_time_route.json")
     rp_read1 = RouteParams.from_file(filename1)
     rp_1_str = 'speedy isobased routing'
 
@@ -113,12 +112,12 @@ if __name__ == "__main__":
     do_plot_route = False
     do_plot_power_vs_dist = True
     do_plot_fuel_vs_dist = False
-    do_plot_acc_fuel_vs_dist = False
+    do_plot_acc_fuel_vs_dist = True
 
     do_plot_power_vs_lon = True
     do_plot_fuel_vs_lon = False
-    do_plot_power_vs_lat = True
-    do_plot_fuel_vs_lat = False
+    do_plot_power_vs_lat = False
+    do_plot_fuel_vs_lat = True
 
     do_plot_power_vs_dist_showing_weather = False
     do_plot_power_vs_dist_ratios = False
